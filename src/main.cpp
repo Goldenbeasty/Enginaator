@@ -3,6 +3,8 @@
 
 //Who's your daddy
 
+void inter();
+
 #define interrupt_sensor 2
 
 int current_task = 0;
@@ -22,6 +24,8 @@ Servo servodouble;
 #define dropoffpointservo1 15
 #define dropoffpointservo2 -15
 volatile int station = 0;
+#define singlezeropoint 0
+#define doublezeropoint 0
 
 volatile int timeoflaststation = 0;
 int waituntil = 0;
@@ -46,6 +50,8 @@ void setup() {
   servodouble.attach(secondservopin);
   // Serial.begin(9600);
   attachInterrupt(digitalPinToInterrupt(2), inter, FALLING);
+  servosingle.write(singlezeropoint);
+  servodouble.write(doublezeropoint);
   }
 
 void loop() {
@@ -111,4 +117,5 @@ void loop() {
  analogWrite(MC_enable_A, 0);
  digitalWrite(M_1_dir_1, LOW);
  digitalWrite(M_1_dir_2, LOW);
+ delay(20000);
 }
