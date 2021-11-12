@@ -130,11 +130,7 @@ void loop() {
     while(waituntil > millis()){
       delay(10);
     }
-    while(station < 6){
-      analogWrite(MC_enable_A, drivingspeed);
-    }
-    analogWrite(MC_enable_A, 0);
-    current_task = 15;//random
+  
   }
 
 
