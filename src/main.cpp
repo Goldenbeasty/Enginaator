@@ -12,8 +12,8 @@ void inter();
 int current_task = 0;
 
 #define MC_enable_A 11
-#define M_1_dir_1 3
-#define M_1_dir_2 4
+#define M_1_dir_1 8
+#define M_1_dir_2 7
 #define drivingspeed 255 // 0-255
 
 //servo setup
@@ -23,11 +23,11 @@ Servo servodouble;
 #define secondservopin 10
 // int servosinglepos = 0;
 // int servodoublepos = 0;
-#define dropoffpointservo1 15
-#define dropoffpointservo2 -15
+#define dropoffpointservo1 90
+#define dropoffpointservo2 -90
 volatile int station = 0;
-#define singlezeropoint 0
-#define doublezeropoint 0
+#define singlezeropoint 170
+#define doublezeropoint -170
 
 volatile int timeoflaststation = 0;
 int waituntil = 0;
@@ -41,6 +41,8 @@ void inter(){
 
 
 void setup() {
+
+  Serial.begin(9600);
 
   delay(5000);
   // put your setup code here, to run once:
@@ -57,6 +59,8 @@ void setup() {
 
   pinMode(Switch_1, INPUT_PULLUP);
   pinMode(Switch_2, INPUT_PULLUP);
+  Serial.println(digitalRead(Switch_1));
+  Serial.println(digitalRead(Switch_2));
     if (digitalRead(Switch_1) == LOW and digitalRead(Switch_2) == LOW){
       current_task = 0;
     }
@@ -66,18 +70,23 @@ void setup() {
     if (digitalRead(Switch_1) and digitalRead(Switch_2)){
       current_task = 2;
     }
+    Serial.println("end of setup");
   }
 
 void loop() {
   // put your main code here, to run repeatedly:
   if (current_task == 0){ // challenge 1
+  Serial.println("task1");
     digitalWrite(M_1_dir_1, HIGH);
     digitalWrite(M_1_dir_2, LOW);
+    analogWrite(MC_enable_A, drivingspeed);
     while (true){
-      analogWrite(MC_enable_A, drivingspeed);
+      digitalWrite(MC_enable_A, HIGH);
+      Serial.println("am high");
     }
   }
   if (current_task == 1){
+    Serial.println("task2");
     digitalWrite(M_1_dir_1, HIGH);
     digitalWrite(M_1_dir_2, LOW);
     while (station < 2){
@@ -86,6 +95,7 @@ void loop() {
     analogWrite(MC_enable_A, 0);
   }
   if (current_task == 2){
+    Serial.println("task3");
     digitalWrite(M_1_dir_1, HIGH);
     digitalWrite(M_1_dir_2, LOW);
     while (station < 2){
@@ -99,7 +109,7 @@ void loop() {
       delay(100);
     }
     delay(2000);
-    servosingle.write(0);
+    servosingle.write(singlezeropoint);
     while (station < 3)
     {
       analogWrite(MC_enable_A, drivingspeed);
