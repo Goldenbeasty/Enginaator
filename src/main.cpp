@@ -99,13 +99,10 @@ void loop() {
     while(waituntil > millis()){
       delay(100);
     }
-    
-    
-    
-
-
-    
-    
+    while(station < 7){
+      analogWrite(MC_enable_A, drivingspeed);
+    }
+    analogWrite(MC_enable_A, 0);
   }
 
 
