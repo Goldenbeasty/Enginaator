@@ -6,6 +6,8 @@
 void inter();
 
 #define interrupt_sensor 2
+#define Switch_1 12
+#define Switch_2 13
 
 int current_task = 0;
 
@@ -52,6 +54,18 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(2), inter, FALLING);
   servosingle.write(singlezeropoint);
   servodouble.write(doublezeropoint);
+
+  pinMode(Switch_1, INPUT_PULLUP);
+  pinMode(Switch_2, INPUT_PULLUP);
+    if (digitalRead(Switch_1) == LOW and digitalRead(Switch_2) == LOW){
+      current_task = 0;
+    }
+    if (digitalRead(Switch_1) and digitalRead(Switch_2) == LOW){
+      current_task = 1;
+    }
+    if (digitalRead(Switch_1) and digitalRead(Switch_2)){
+      current_task = 2;
+    }
   }
 
 void loop() {
@@ -118,4 +132,6 @@ void loop() {
  digitalWrite(M_1_dir_1, LOW);
  digitalWrite(M_1_dir_2, LOW);
  delay(20000);
+
+//  current_task++;
 }
