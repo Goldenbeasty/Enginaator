@@ -14,7 +14,7 @@ int current_task = 0;
 #define MC_enable_A 11
 #define M_1_dir_1 8
 #define M_1_dir_2 7
-#define drivingspeed 255 // 0-255
+#define drivingspeed 100 // 0-255
 
 //servo setup
 Servo servosingle;
@@ -23,11 +23,11 @@ Servo servodouble;
 #define secondservopin 10
 // int servosinglepos = 0;
 // int servodoublepos = 0;
-#define dropoffpointservo1 90
-#define dropoffpointservo2 -90
+#define dropoffpointservo1 120
+#define dropoffpointservo2 -120
 volatile int station = 0;
 #define singlezeropoint 170
-#define doublezeropoint -170
+#define doublezeropoint -50
 
 volatile int timeoflaststation = 0;
 int waituntil = 0;
