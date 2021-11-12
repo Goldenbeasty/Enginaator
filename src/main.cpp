@@ -14,7 +14,7 @@ int current_task = 0;
 #define MC_enable_A 11
 #define M_1_dir_1 8
 #define M_1_dir_2 7
-#define drivingspeed 100 // 0-255
+#define drivingspeed 75 // 0-255 // 75
 
 //servo setup
 Servo servosingle;
@@ -23,14 +23,16 @@ Servo servodouble;
 #define secondservopin 10
 // int servosinglepos = 0;
 // int servodoublepos = 0;
-#define dropoffpointservo1 120
-#define dropoffpointservo2 -120
+#define dropoffpointservo1 90
+#define dropoffpointservo2 90
 volatile int station = 0;
 #define singlezeropoint 170
-#define doublezeropoint -50
+#define doublezeropoint 170
+
+#define waittime 30000 //30000
 
 volatile int timeoflaststation = 0;
-int waituntil = 0;
+unsigned int waituntil = 0;
 
 void inter(){
   if (current_task != 0 and (millis() - timeoflaststation) > 3000){
@@ -81,7 +83,6 @@ void loop() {
     digitalWrite(M_1_dir_2, LOW);
     analogWrite(MC_enable_A, drivingspeed);
     while (true){
-      digitalWrite(MC_enable_A, HIGH);
       Serial.println("am high");
     }
   }
@@ -98,41 +99,42 @@ void loop() {
     Serial.println("task3");
     digitalWrite(M_1_dir_1, HIGH);
     digitalWrite(M_1_dir_2, LOW);
-    while (station < 2){
+    while (station < 1){
       analogWrite(MC_enable_A, drivingspeed);
     }
     analogWrite(MC_enable_A, 0);
     delay(1500);
-    servosingle.write(dropoffpointservo2);
-    waituntil = millis() + 30000;
+    servosingle.write(dropoffpointservo1);
+    waituntil = millis() + waittime;
     while (waituntil > millis()){
       delay(100);
     }
     delay(2000);
     servosingle.write(singlezeropoint);
-    while (station < 3)
+    while (station < 2)
     {
       analogWrite(MC_enable_A, drivingspeed);
     }
     analogWrite(MC_enable_A, 0);
     delay(2000);
-    servodouble.write(dropoffpointservo1);
-    waituntil = millis() + 30000;
-    servodouble.write(0);
+    servodouble.write(dropoffpointservo2);
+    waituntil = millis() + waittime;
+    // servodouble.write(doublezeropoint);
     delay(1000);
-    while (station < 4){
+    while (station < 3){
       analogWrite(MC_enable_A, drivingspeed);
     }
     analogWrite(MC_enable_A, 0);
-    delay(3000);
-    waituntil = millis() + 8000;
+    delay(10);
+    waituntil = millis() + (waittime / 3);
     while(waituntil > millis()){
-      delay(100);
+      delay(10);
     }
-    while(station < 7){
+    while(station < 6){
       analogWrite(MC_enable_A, drivingspeed);
     }
     analogWrite(MC_enable_A, 0);
+    current_task = 15;//random
   }
 
 
