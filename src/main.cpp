@@ -23,9 +23,13 @@ Servo servodouble;
 #define dropoffpointservo2 -15
 volatile int station = 0;
 
+volatile int timeoflaststation = 0;
+int waituntil = 0;
+
 void inter(){
-  if (current_task != 0){
+  if (current_task != 0 and (millis() - timeoflaststation) > 3000){
     station++;
+    timeoflaststation = millis();
   }
 }
 
@@ -70,7 +74,34 @@ void loop() {
     analogWrite(MC_enable_A, 0);
     delay(1500);
     servosingle.write(dropoffpointservo2);
+    waituntil = millis() + 30000;
+    while (waituntil > millis()){
+      delay(100);
+    }
     delay(2000);
+    servosingle.write(0);
+    while (station < 3)
+    {
+      analogWrite(MC_enable_A, drivingspeed);
+    }
+    analogWrite(MC_enable_A, 0);
+    delay(2000);
+    servodouble.write(dropoffpointservo1);
+    waituntil = millis() + 30000;
+    servodouble.write(0);
+    delay(1000);
+    while (station < 4){
+      analogWrite(MC_enable_A, drivingspeed);
+    }
+    analogWrite(MC_enable_A, 0);
+    delay(3000);
+    waituntil = millis() + 8000;
+    while(waituntil > millis()){
+      delay(100);
+    }
+    
+    
+    
 
 
     
